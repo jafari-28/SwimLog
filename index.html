@@ -1,14 +1,89 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SwimLog</title>
+    <title>SwimLog – Trainings erfassen</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>SwimLog</h1>
-    <p>Dies ist die Vorschau für SwimLog</p>
-    
+    <main class="container">
+        <header class="hero">
+            <p class="eyebrow">M307 · Frontend → PHP → SQLite</p>
+            <h1>SwimLog</h1>
+            <p>Erfasse deine Schwimmtrainings und speichere sie direkt in einer SQLite-Datenbank.</p>
+        </header>
+
+        <section class="card">
+            <h2>Training erfassen</h2>
+
+            <form id="trainingForm">
+                <div class="form-grid">
+                    <div class="field">
+                        <label for="datum">Datum *</label>
+                        <input type="date" id="datum" name="datum" required>
+                    </div>
+
+                    <div class="field">
+                        <label for="schwimmart">Schwimmart *</label>
+                        <select id="schwimmart" name="schwimmart" required>
+                            <option value="">Bitte wählen</option>
+                            <option value="Freistil">Freistil</option>
+                            <option value="Rücken">Rücken</option>
+                            <option value="Brust">Brust</option>
+                            <option value="Delfin">Delfin</option>
+                            <option value="Lagen">Lagen</option>
+                            <option value="Gemischt">Gemischt</option>
+                        </select>
+                    </div>
+
+                    <div class="field">
+                        <label for="distanz">Distanz in Metern *</label>
+                        <input type="number" id="distanz" name="distanz" min="1" max="50000" step="1" placeholder="z. B. 4500" required>
+                    </div>
+
+                    <div class="field">
+                        <label for="dauer">Dauer in Minuten *</label>
+                        <input type="number" id="dauer" name="dauer" min="1" max="600" step="1" placeholder="z. B. 90" required>
+                    </div>
+
+                    <div class="field full-width">
+                        <label for="intensitaet">Intensität *</label>
+                        <select id="intensitaet" name="intensitaet" required>
+                            <option value="">Bitte wählen</option>
+                            <option value="Locker">Locker</option>
+                            <option value="Mittel">Mittel</option>
+                            <option value="Hart">Hart</option>
+                            <option value="Sehr hart">Sehr hart</option>
+                        </select>
+                    </div>
+
+                    <div class="field full-width">
+                        <label for="notiz">Notiz</label>
+                        <textarea id="notiz" name="notiz" rows="4" maxlength="500" placeholder="Wie lief das Training? Was war der Schwerpunkt?"></textarea>
+                    </div>
+                </div>
+
+                <button type="submit" id="submitButton">Training speichern</button>
+                <p id="meldung" class="meldung" aria-live="polite"></p>
+            </form>
+        </section>
+
+        <section class="card">
+            <div class="section-heading">
+                <div>
+                    <p class="eyebrow">SQLite-Daten</p>
+                    <h2>Gespeicherte Trainings</h2>
+                </div>
+                <button type="button" class="secondary" id="reloadButton">Aktualisieren</button>
+            </div>
+
+            <div id="trainingListe" class="training-list">
+                <p class="empty-state">Trainings werden geladen …</p>
+            </div>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
 </body>
 </html>

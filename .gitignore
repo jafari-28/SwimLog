@@ -1,4 +1,4 @@
-confing.php
 .env
+config.php
 .vscode
-_DS_Store
+*.db
