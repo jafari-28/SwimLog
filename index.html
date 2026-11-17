@@ -1,89 +1,181 @@
-<!DOCTYPE html>
-<html lang="de">
+<!doctype html>
+<html lang="de-CH">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SwimLog – Trainings erfassen</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f4f6f8">
+  <meta name="description" content="Trainingstagebuch für Schwimmtraining, Intensität und Schlaf.">
+  <title>SwimLog – Trainingstagebuch</title>
+  <link rel="stylesheet" href="style.css?v=3">
+  <script src="script.js?v=2" defer></script>
 </head>
-<body>
-    <main class="container">
-        <header class="hero">
-            <p class="eyebrow">M307 · Frontend → PHP → SQLite</p>
-            <h1>SwimLog</h1>
-            <p>Erfasse deine Schwimmtrainings und speichere sie direkt in einer SQLite-Datenbank.</p>
-        </header>
+<body id="start">
+  <header class="site-header frame">
+    <a class="wordmark" href="#start" aria-label="SwimLog Start">Swim<span>Log</span></a>
+    <nav class="site-nav" aria-label="Bereiche">
+      <a href="#eintrag">Training</a>
+      <a href="#uebersicht">Übersicht</a>
+      <a href="#verlauf">Verlauf</a>
+    </nav>
+  </header>
 
-        <section class="card">
-            <h2>Training erfassen</h2>
+  <main class="frame">
+    <section class="hero" aria-labelledby="page-title">
+      <div class="hero-content">
+        <h1 id="page-title">Schwimmtraining</h1>
+        <p>Distanz, Intensität und Schlaf auf einen Blick.</p>
+        <a class="hero-button" href="#eintrag">Training eintragen</a>
+      </div>
+    </section>
 
-            <form id="trainingForm">
-                <div class="form-grid">
-                    <div class="field">
-                        <label for="datum">Datum *</label>
-                        <input type="date" id="datum" name="datum" required>
-                    </div>
+    <aside class="connection-notice" id="connection-notice" aria-label="Serververbindung" hidden>
+      <div role="status">
+        <strong>Trainingsdaten gerade nicht verfügbar</strong>
+        <p id="connection-details"></p>
+      </div>
+      <a id="open-local-server" class="secondary" href="http://localhost:8000/" hidden>SwimLog öffnen</a>
+      <button id="retry-load" class="secondary" type="button">Erneut laden</button>
+    </aside>
 
-                    <div class="field">
-                        <label for="schwimmart">Schwimmart *</label>
-                        <select id="schwimmart" name="schwimmart" required>
-                            <option value="">Bitte wählen</option>
-                            <option value="Freistil">Freistil</option>
-                            <option value="Rücken">Rücken</option>
-                            <option value="Brust">Brust</option>
-                            <option value="Delfin">Delfin</option>
-                            <option value="Lagen">Lagen</option>
-                            <option value="Gemischt">Gemischt</option>
-                        </select>
-                    </div>
-
-                    <div class="field">
-                        <label for="distanz">Distanz in Metern *</label>
-                        <input type="number" id="distanz" name="distanz" min="1" max="50000" step="1" placeholder="z. B. 4500" required>
-                    </div>
-
-                    <div class="field">
-                        <label for="dauer">Dauer in Minuten *</label>
-                        <input type="number" id="dauer" name="dauer" min="1" max="600" step="1" placeholder="z. B. 90" required>
-                    </div>
-
-                    <div class="field full-width">
-                        <label for="intensitaet">Intensität *</label>
-                        <select id="intensitaet" name="intensitaet" required>
-                            <option value="">Bitte wählen</option>
-                            <option value="Locker">Locker</option>
-                            <option value="Mittel">Mittel</option>
-                            <option value="Hart">Hart</option>
-                            <option value="Sehr hart">Sehr hart</option>
-                        </select>
-                    </div>
-
-                    <div class="field full-width">
-                        <label for="notiz">Notiz</label>
-                        <textarea id="notiz" name="notiz" rows="4" maxlength="500" placeholder="Wie lief das Training? Was war der Schwerpunkt?"></textarea>
-                    </div>
-                </div>
-
-                <button type="submit" id="submitButton">Training speichern</button>
-                <p id="meldung" class="meldung" aria-live="polite"></p>
-            </form>
-        </section>
-
-        <section class="card">
-            <div class="section-heading">
-                <div>
-                    <p class="eyebrow">SQLite-Daten</p>
-                    <h2>Gespeicherte Trainings</h2>
-                </div>
-                <button type="button" class="secondary" id="reloadButton">Aktualisieren</button>
+    <div class="dashboard">
+      <section id="eintrag" class="panel" aria-labelledby="form-title">
+        <h2 id="form-title" class="panel-title">Neues Training</h2>
+        <form id="log-form" novalidate>
+          <p id="form-error" class="form-error" role="alert" tabindex="-1" hidden></p>
+          <div class="form-grid">
+            <div class="field">
+              <label for="date">Datum</label>
+              <input type="date" id="date" name="date" required>
             </div>
-
-            <div id="trainingListe" class="training-list">
-                <p class="empty-state">Trainings werden geladen …</p>
+            <div class="field">
+              <label for="stroke">Schwimmart</label>
+              <select id="stroke" name="stroke" required>
+                <option value="">Auswählen</option>
+                <option>Freistil</option>
+                <option>Rücken</option>
+                <option>Brust</option>
+                <option>Delfin</option>
+                <option>Lagen</option>
+                <option>Gemischt</option>
+              </select>
             </div>
-        </section>
-    </main>
+            <div class="field">
+              <label for="distance">Distanz <span class="unit">m</span></label>
+              <input type="number" id="distance" name="distance" min="1" max="50000" step="1" inputmode="numeric" placeholder="z. B. 2400" required>
+            </div>
+            <div class="field">
+              <label for="duration">Dauer <span class="unit">min</span></label>
+              <input type="number" id="duration" name="duration" min="1" max="600" step="1" inputmode="numeric" placeholder="z. B. 60" required>
+            </div>
+            <fieldset class="field full-width">
+              <legend>Trainingstyp</legend>
+              <div class="type-options">
+                <label class="type-chip"><input type="radio" name="type" value="Sprint" checked><span>Sprint</span></label>
+                <label class="type-chip"><input type="radio" name="type" value="Ausdauer"><span>Ausdauer</span></label>
+                <label class="type-chip"><input type="radio" name="type" value="Technik"><span>Technik</span></label>
+                <label class="type-chip"><input type="radio" name="type" value="Kraft"><span>Kraft</span></label>
+                <label class="type-chip"><input type="radio" name="type" value="Regeneration"><span>Regeneration</span></label>
+                <label class="type-chip"><input type="radio" name="type" value="Wettkampf"><span>Wettkampf</span></label>
+              </div>
+            </fieldset>
+            <div class="field full-width range-field">
+              <div class="field-head">
+                <label for="intensity">Intensität</label>
+                <span class="range-readout" aria-hidden="true"><strong id="intensity-value">7</strong> / 10</span>
+              </div>
+              <input type="range" id="intensity" name="intensity" min="1" max="10" value="7" step="1">
+              <div class="range-labels" aria-hidden="true"><span>Locker</span><span>Sehr hart</span></div>
+            </div>
+            <div class="field">
+              <label for="sleep">Schlaf <span class="unit">h</span></label>
+              <input type="number" id="sleep" name="sleep" inputmode="decimal" min="0" max="16" step="0.5" value="8" required>
+            </div>
+            <div class="field range-field">
+              <div class="field-head">
+                <label for="quality">Schlafqualität</label>
+                <span class="range-readout" aria-hidden="true"><strong id="quality-value">8</strong> / 10</span>
+              </div>
+              <input type="range" id="quality" name="quality" min="1" max="10" value="8" step="1">
+              <div class="range-labels" aria-hidden="true"><span>Schlecht</span><span>Sehr gut</span></div>
+            </div>
+            <div class="field full-width">
+              <div class="field-head">
+                <label for="description">Notiz <span class="unit">optional</span></label>
+                <span class="char-counter" id="char-count" aria-hidden="true">0 / 600</span>
+              </div>
+              <textarea id="description" name="description" rows="2" maxlength="600" placeholder="Was möchtest du festhalten?"></textarea>
+            </div>
+          </div>
+          <div class="form-actions">
+            <button class="save-btn" type="submit"><span id="save-label">Training speichern</span></button>
+            <button class="secondary" id="cancel-edit" type="button" hidden>Abbrechen</button>
+          </div>
+        </form>
+      </section>
 
-    <script src="script.js"></script>
+      <section id="uebersicht" class="panel overview" aria-labelledby="stats-title">
+        <div class="section-heading">
+          <h2 id="stats-title">Übersicht</h2>
+          <span class="caption">Alle Trainings</span>
+        </div>
+        <dl class="stats">
+          <div class="stat">
+            <dt>Gesamtdistanz</dt>
+            <dd><span id="stat-distance">–</span><small> m</small></dd>
+          </div>
+          <div class="stat">
+            <dt>Einheiten</dt>
+            <dd id="stat-count">–</dd>
+          </div>
+          <div class="stat">
+            <dt>Ø Intensität</dt>
+            <dd><span id="stat-intensity">–</span><small> / 10</small></dd>
+          </div>
+          <div class="stat">
+            <dt>Ø Schlaf</dt>
+            <dd><span id="stat-sleep">–</span><small> h</small></dd>
+          </div>
+        </dl>
+        <div class="chart">
+          <div class="chart-heading">
+            <h3>Intensität</h3>
+            <span class="caption">Letzte 7 Einheiten</span>
+          </div>
+          <div class="chart-layout">
+            <div class="chart-scale" aria-hidden="true"><span>10</span><span>5</span><span>0</span></div>
+            <div id="trend-chart" class="trend-chart" role="img" aria-label="Intensitätsverlauf"></div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <section id="verlauf" class="panel" aria-labelledby="history-title">
+      <div class="section-heading history-heading">
+        <h2 id="history-title">Trainingsverlauf</h2>
+        <div class="history-actions">
+          <label class="sr-only" for="type-filter">Trainingstyp filtern</label>
+          <select id="type-filter">
+            <option value="Alle">Alle Typen</option>
+            <option>Sprint</option>
+            <option>Ausdauer</option>
+            <option>Technik</option>
+            <option>Kraft</option>
+            <option>Regeneration</option>
+            <option>Wettkampf</option>
+          </select>
+          <button id="export-btn" class="secondary" type="button" disabled>CSV exportieren</button>
+        </div>
+      </div>
+      <div id="history-list" class="history-list" aria-live="polite"></div>
+      <p id="empty-state" class="empty-state">Trainings werden geladen …</p>
+      <p id="no-filter-state" class="empty-state" hidden>Für diesen Typ gibt es noch keine Einträge.</p>
+    </section>
+
+    <footer class="footer">
+      <span>SwimLog · M307</span>
+      <button id="delete-all" class="text-button" type="button" hidden>Alle Einträge löschen</button>
+    </footer>
+  </main>
+  <div id="toast" class="toast" role="status" aria-live="polite" aria-atomic="true"></div>
 </body>
 </html>

@@ -1,18 +1,22 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="860" height="610" viewBox="0 0 860 610">
-  <rect width="860" height="610" fill="#eef6fb"/>
-  <rect x="170" y="45" width="520" height="520" rx="24" fill="#ffffff" stroke="#087fbd" stroke-width="4"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="860" height="730" viewBox="0 0 860 730">
+  <rect width="860" height="730" fill="#eef6fb"/>
+  <rect x="170" y="45" width="520" height="640" rx="24" fill="#ffffff" stroke="#087fbd" stroke-width="4"/>
   <rect x="170" y="45" width="520" height="92" rx="24" fill="#087fbd"/>
   <path d="M170 113h520v24H170z" fill="#087fbd"/>
   <text x="430" y="103" text-anchor="middle" font-family="Arial, sans-serif" font-size="31" font-weight="700" fill="#ffffff">TRAINING</text>
   <g font-family="Arial, sans-serif" font-size="22" fill="#102a43">
     <text x="218" y="184" font-weight="700">PK</text><text x="300" y="184">id</text><text x="540" y="184">INTEGER</text>
     <line x1="210" x2="650" y1="205" y2="205" stroke="#d9e7f0"/>
-    <text x="300" y="244">datum</text><text x="540" y="244">TEXT</text>
-    <text x="300" y="296">schwimmart</text><text x="540" y="296">TEXT</text>
-    <text x="300" y="348">distanz</text><text x="540" y="348">INTEGER</text>
-    <text x="300" y="400">dauer</text><text x="540" y="400">INTEGER</text>
-    <text x="300" y="452">intensitaet</text><text x="540" y="452">TEXT</text>
-    <text x="300" y="504">notiz</text><text x="540" y="504">TEXT</text>
-    <text x="300" y="548">erstellt_am</text><text x="540" y="548">DATETIME</text>
+    <text x="240" y="244">datum</text><text x="540" y="244">TEXT</text>
+    <text x="240" y="285">schwimmart</text><text x="540" y="285">TEXT</text>
+    <text x="240" y="326">distanz</text><text x="540" y="326">INTEGER</text>
+    <text x="240" y="367">dauer</text><text x="540" y="367">INTEGER</text>
+    <text x="240" y="408">intensitaet</text><text x="540" y="408">TEXT</text>
+    <text x="240" y="449">notiz</text><text x="540" y="449">TEXT</text>
+    <text x="240" y="490">erstellt_am</text><text x="540" y="490">DATETIME</text>
+    <text x="240" y="531">trainingstyp</text><text x="540" y="531">TEXT</text>
+    <text x="240" y="572">intensitaet_wert</text><text x="540" y="572">INTEGER</text>
+    <text x="240" y="613">schlaf_stunden</text><text x="540" y="613">REAL</text>
+    <text x="240" y="654">schlaf_qualitaet</text><text x="540" y="654">INTEGER</text>
   </g>
 </svg>

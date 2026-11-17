@@ -2,3 +2,7 @@
 config.php
 .vscode
 *.db
+*.db-*
+*.sqlite
+*.sqlite-*
+.DS_Store
